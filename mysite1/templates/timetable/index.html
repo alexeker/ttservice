@@ -1,0 +1,75 @@
+<html>  
+<head>
+    <title>Timetable</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Condensed">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: 'Roboto Condensed', sans-serif;
+             
+            font-weight: 500;
+            font-size: large;
+       }
+       div#weektype a {
+           border: 1px;
+       }
+    </style>
+    <script>
+        //function to show/hide row when a tag is clicked
+        function showHideRow(frowId, srowId) {
+            var row = document.getElementById(frowId);
+            var row2 = document.getElementById(srowId);
+            if (row.style.display == 'none') {
+                row.style.display = '';
+                row2.style.display = 'none';
+                console.log(frowId);
+            } 
+        }
+        //execute function when page is loaded to hide second row
+        
+        window.onload = function() {
+            
+            if ("{{isChyselnyk}}" === "0"){
+                showHideRow("chiselnik", "znamenyk");
+                
+            } else {
+                showHideRow("znamenyk", "chiselnik");
+            }
+        }
+    </script>
+</head>   
+<body>
+    <h1>Timetable</h1>
+    <br>
+    <h4>{{session.username}}</h4>
+    <div class="container">
+        <div class="row border-bottom">
+            <div id="weektype" class="col-8 mt-2">
+                <a href="javascript:" onclick='showHideRow("chiselnik", "znamenyk")'>Чисельник</a>
+                <a class="ps-2"  href="javascript:" onclick='showHideRow( "znamenyk", "chiselnik")'>Знаменник</a>
+            </div>
+            <div class="col-4 mt-2" style="text-align: right; font-size: larger;">{% if isChyselnyk == 0 %}Чисельник {% elif isChyselnyk == 1 %}Знаменник {% endif %}</div>
+        </div>
+        <div id="chiselnik"class="row">
+            {% for day in week %}
+            <div class="col-12 {% if weekday == forloop.counter0 %} bg-body-secondary {% endif %} col-lg mt-2">
+                <div class="card mt-2 alert-dark"><h3>{% cycle 'Monday' 'Tuesday' 'Wednesday' 'Thursday' 'Friday' %}</h3></div>
+                {% for para in day %}
+                <div class="card mt-2">
+                    {{ para.3 }}
+                    <div>
+                        <a href={{para.4}}><button class="btn btn-primary">Edit</button></a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}            
+        </div>
+        <div id="znamenyk" class="row" style="display: none;">
+            znamenyk
+        </div>
+    </div>
+    
+</body>
+</html>
